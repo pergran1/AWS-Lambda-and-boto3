@@ -10,18 +10,18 @@ The new bucket when the function runs again: this-bucket-already-exist-1
 import json
 import boto3
 
-s3 = boto3.client('s3')
-bucket_name: str = 'created-by-lambda-testing-swe'
-region: str = 'eu-north-1'
+s3 = boto3.client("s3")
+bucket_name: str = "created-by-lambda-testing-swe"
+region: str = "eu-north-1"
 
 
-def create_bucket(bucket_name: str = bucket_name,
-                  region: str = region) -> None:
-    s3.create_bucket(Bucket=bucket_name,
-                     CreateBucketConfiguration={
-                         'LocationConstraint': region,
-                     },
-                     )
+def create_bucket(bucket_name: str = bucket_name, region: str = region) -> None:
+    s3.create_bucket(
+        Bucket=bucket_name,
+        CreateBucketConfiguration={
+            "LocationConstraint": region,
+        },
+    )
 
 
 def lambda_handler(event, context) -> None:
@@ -36,4 +36,3 @@ def lambda_handler(event, context) -> None:
         except:
             create_bucket(f"{bucket_name}-{tried_buckets}")
             created_bucket = True
-
