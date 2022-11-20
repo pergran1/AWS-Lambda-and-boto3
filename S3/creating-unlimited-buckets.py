@@ -15,7 +15,8 @@ bucket_name: str = 'created-by-lambda-testing-swe'
 region: str = 'eu-north-1'
 
 
-def create_bucket(bucket_name: str = bucket_name, region: str = region ):
+def create_bucket(bucket_name: str = bucket_name,
+                  region: str = region) -> None:
     s3.create_bucket(Bucket=bucket_name,
                      CreateBucketConfiguration={
                          'LocationConstraint': region,
@@ -23,7 +24,7 @@ def create_bucket(bucket_name: str = bucket_name, region: str = region ):
                      )
 
 
-def lambda_handler(event, context):
+def lambda_handler(event, context) -> None:
     created_bucket: bool = False
     tried_buckets: int = 0
     while created_bucket == False:
@@ -35,3 +36,4 @@ def lambda_handler(event, context):
         except:
             create_bucket(f"{bucket_name}-{tried_buckets}")
             created_bucket = True
+
