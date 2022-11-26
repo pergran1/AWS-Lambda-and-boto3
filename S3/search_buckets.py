@@ -18,7 +18,7 @@ def get_bucket_names() -> List[str]:
 def get_bucket_locations() -> List[str]:
     s3 = boto3.client('s3')
     bucket_names: List[str] = get_bucket_names()
-    return [s3.get_bucket_location(Bucket=bucket_name)['LocationConstraint'] for bucket_name in bucket_names]
+    return [s3.get_bucket_location(Bucket=bucket_name).get('LocationConstraint') for bucket_name in bucket_names]
 
 
 def get_bucket_info() -> None:
@@ -30,9 +30,30 @@ def get_bucket_info() -> None:
     regions: List[str] = get_bucket_locations()
 
     for name, region in zip(bucket_names, regions):
-        print(f"Bucketname: {name} region: {region}")
+        bucket_info_dict = get_bucket_objects(name)
+        print(f"Bucketname: {name} region: {region} nbr of folders: {bucket_info_dict.get('nbr_folders')}"
+              f" nbr of files: {bucket_info_dict.get('nbr_files')}")
 
 
-print(get_bucket_names())
-print(get_bucket_locations())
+def get_bucket_objects(bucket_name: str) -> dict:
+    info_dict = {'nbr_folders': 0, 'nbr_files': 0}
+    s3 = boto3.client('s3')
+    response: List[dict] = s3.list_objects(Bucket=bucket_name)
+    # print(response.get('Contents'))
+    response_list = response.get('Contents')
+    if (response_list == None):
+        return info_dict
+    for key in response_list:
+        keys = key.get('Key')
+        try:
+            if len(keys.split('/')[1]) == 0:
+                info_dict["nbr_folders"] += 1
+            else:
+                info_dict['nbr_files'] += 1
+        except:
+            continue
+    return info_dict
+
+
 get_bucket_info()
+
