@@ -55,5 +55,5 @@ def get_bucket_objects(bucket_name: str) -> dict:
     return info_dict
 
 
-get_bucket_info()
+
 
