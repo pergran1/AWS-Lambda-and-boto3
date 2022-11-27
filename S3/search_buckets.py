@@ -55,5 +55,13 @@ def get_bucket_objects(bucket_name: str) -> dict:
     return info_dict
 
 
+def get_buckets_time_creation(format_time: bool = True):
+    buckets_dic = bucket_list()
+    if format_time:
+        return [{'Name': bucket.get('Name'), 'CreationDate': bucket.get('CreationDate').strftime('%Y-%m-%d %H-%M')} for
+                bucket in buckets_dic]
+    else:
+        return [{'Name': bucket.get('Name'), 'CreationDate': bucket.get('CreationDate')} for bucket in buckets_dic]
 
 
+#print(get_buckets_time_creation(False))
