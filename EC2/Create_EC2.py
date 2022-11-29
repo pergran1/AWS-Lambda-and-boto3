@@ -3,6 +3,9 @@ import boto3
 
 ec2 = boto3.resource('ec2')
 
+
+# WHen using lambda in AWS dont forget to add role to the function
+
 def create_ec2():
     instance = ec2.create_instances(
         ImageId='ami-02aeff1a953c5c2ff',
@@ -14,5 +17,6 @@ def create_ec2():
     )
 
     print("New insteance created:", instance[0].id)
+
 
 create_ec2()
